@@ -12,16 +12,14 @@ class LumberjackClient {
       typeforce.Object,
       typeforce.maybe(typeforce.Boolean),
     ), arguments)
-    Object.assign(this, {
-      config,
-      useTls,
-      queue: [],
-    })
+    Object.assign(this, {config, useTls, queue: []})
     connect.call(this)
   }
 
   log(data) {
-    typeforce(typeforce.tuple(typeforce.Object), arguments)
+    typeforce(typeforce.tuple(
+      typeforce.Object,
+    ), arguments)
     if (this.connected) {
       send.call(this, [map(data)])
     } else if (this.connecting) {
@@ -34,9 +32,9 @@ class LumberjackClient {
 function connect() {
   this.connecting = true
   const cb = () => {
+    debug('connected to logstash')
     this.connecting = false
     this.connected = true
-    debug('connected to logstash')
     flush.call(this)
   }
   if (this.useTls) {
@@ -45,18 +43,18 @@ function connect() {
     this.socket = net.connect(this.config, cb)
   }
   this.socket.on('error', (err) => {
+    debug('logstash socket error: %o', err.message)
     this.connecting = false
     this.connected = false
     if (this.socket) {
       this.socket.destroy()
     }
     delete this.socket
-    debug('logstash socket error: %o', err.message)
   })
   this.socket.on('end', () => {
-    debug('logstash ended connection')
+    debug('logstash server ended connection')
   })
-  this.socket.on('close', (closedWithError) => {
+  this.socket.on('close', () => {
     this.connected = false
     if (!this.connecting) {
       setTimeout(connect.bind(this))
