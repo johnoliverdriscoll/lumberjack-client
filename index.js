@@ -12,8 +12,14 @@ class LumberjackClient {
       typeforce.Object,
       typeforce.maybe(typeforce.Boolean),
     ), arguments)
-    Object.assign(this, {config, useTls, queue: []})
-    connect.call(this)
+    Object.assign(this, {
+      config: {...config},
+      useTls,
+      queue: [],
+    })
+    if (this.config.host && this.config.port) {
+      connect.call(this)
+    }
   }
 
   log(data) {
