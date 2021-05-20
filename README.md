@@ -1,8 +1,8 @@
 # lumberjack-client
 
 This is a small Lumberjack V2 client supporting JSON data, compression and TLS sockets.
-The client will do its best to reconnect when disconnected, queuing its outing messages
-as necessary.
+The client will do its best to reconnect when disconnected, queuing its outgoing
+messages as necessary.
 
 ### Socket
 
@@ -15,7 +15,7 @@ const client = new LumberjackClient({
 client.log({
   '@timestamp': new Date()
   host: {
-    hoshname: os.hostname(),
+    hostname: os.hostname(),
   },
   message: 'hello world',
 })
@@ -35,7 +35,7 @@ const client = new LumberjackClient({
 client.log({
   '@timestamp': new Date()
   host: {
-    hoshname: os.hostname(),
+    hostname: os.hostname(),
   },
   message: 'hello tls server',
 })
